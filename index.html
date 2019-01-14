@@ -16,24 +16,37 @@
 </head>
 <body>
     <div class="container">
-        <h1>The Cell Games</h1>
+        <div class="row">
+            <h1>The Cell Games</h1>
+        </div>
+        <div id="battlefield">
+            <div class="row">
+                <div class="player-col col-5">
+                    <h2 class="mx-auto">Your Character</h2>
+                </div>
+                <div class="text-center col-2">
+                </div>
+                <div class="col-5">
+                    <h2>Your Enemy</h2>
+                </div>
+            </div>
+            <div class="row">
+                <div class="text-center col-5" id="player-area">
+                </div>
+                <div class="text-center col-2">
+                    <button class="btn btn-dark btn-lg" id="attack-button">Attack</button>
+                    <span id="message"></span>
+                </div>
+                <div class="text-center col-5" id="defender-area">
+                </div>
+            </div>
+        </div>
         <div class="row" id="lobby">
         </div>
         <h2>Challengers</h2>
         <div class="row" id="enemy-area">
         </div>
-        <h2>Your Hero</h2>
-        <div class="row fighter-space" id="player-area">
-        </div>
-        <div class="row" id="game-UI">
-            <div class="text-center">
-                <button class="btn btn-dark btn-lg" id="attack-button">Attack</button>
-                <span id="message"></span>
-            </div>
-        </div>
-        <h2>Your Opponent</h2>
-        <div class="row fighter-space" id="defender-area">
-        </div>
+        
     </div>
         <script type="text/javascript" src="assets/app.js"></script>
 </body>

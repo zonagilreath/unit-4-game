@@ -1,3 +1,6 @@
+var audioPunch = document.createElement("audio");
+audioPunch.setAttribute("src", "assets/Punch.mp3");
+
 class Hero {
     constructor(name, health, base_attack) {
         this.name = name;
@@ -24,7 +27,10 @@ class Hero {
     }
 
     attack(opponent){
-        opponent.health -= this.attack_power;        
+        opponent.health -= this.attack_power;
+        if (opponent.health < 0){
+            opponent.health = 0;
+        }      
     }
 
     checkDead(){
@@ -51,16 +57,19 @@ const game = {
             new Hero("Goku", 100, 10),
             new Hero("Vegeta", 120, 12),
             new Hero("Trunks", 120, 12),
-            new Hero("Android-18", 120, 12)
+            new Hero("Android-18", 120, 100)
         ]
 
         game.needPlayer = true;
         game.needDefender = true;
         game.addListeners();
 
+        $("#message").empty();
+
         $("#attack-button").on("click", function(){
             if (!game.needPlayer & !game.needDefender){
                 game.round();
+                // audioPunch.play();
             }
         });
     },
@@ -80,9 +89,11 @@ const game = {
     },
 
     addPlayer : function(character){
-        character.card.addClass("player");
         character.card.remove();
         $("#player-area").append(character.card);
+        character.card.addClass("player");
+        character.card.removeClass("col-3");
+        character.card.addClass("col-10");
         game.addListeners();
         game.player = character;
         game.needPlayer = false;
@@ -101,10 +112,12 @@ const game = {
 
     addDefender : function(character){
         if (character != game.player){
-            character.card.addClass("defender");
-            game.defender = character;
             character.card.remove();
             $("#defender-area").append(character.card);
+            character.card.addClass("defender");
+            character.card.removeClass("col-3");
+            character.card.addClass("col-10");
+            game.defender = character;
             game.needDefender = false;
             game.addListeners();
         }
@@ -132,28 +145,41 @@ const game = {
         game.defender.card.remove();
         game.defender = null;
         game.needDefender = true;
+        if (!($("#enemy-area").has("div"))){
+            game.winGame();
+        }
     },
 
     createButton : function(){
         let button = $("<button>");
+        button.text("New Game");
         button.addClass("btn btn-dark btn-lg");
-
+        button.attr('id', 'reset-button');
+        button.on("click", function(){
+            game.resetGame();
+            game.initGame();
+        })
+        return button;
     },
 
     loseGame : function(){
-
+        $("#attack-button").off("click");
+        $("#message").append("<h2>You Lose!</h2>")
+        $("#message").append(game.createButton());
     },
 
     winGame : function(){
-
+        $("#attack-button").off("click");
+        $("#message").append("<h2>You Win!</h2>")
+        $("#message").append(game.createButton());
     },
 
     resetGame : function(){
         for (let character of game.characters){
-            character.card.off("click");
+            character.card.remove();
         }
-
-        $("#attackButton").off("click");
+        game.player = null;
+        $("#reset-button").remove();
     }
 
 }

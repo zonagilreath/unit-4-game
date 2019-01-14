@@ -1,7 +1,63 @@
+h1, h2 {
+    margin: auto;
+    text-align: center;
+    /* display: inline-block; */
+}
+
+h2 {
+    padding: 10px 0;
+    background-color: orange;
+}
+
 .card-image {
     width: 100%;
 }
 
-/* .fighter-space{
-    height: 235px;
+span h2 {
+    display: inline;
+}
+
+.enemy {
+    background-color: red;
+}
+
+.player {
+    background-color: green;
+}
+
+.player, .defender {
+    margin: auto;
+}
+
+#attack-button {
+    margin: 50% auto;
+}
+
+/* .attack-button {
+    float: left;
 } */
+
+.hp {
+    font-family: 'Ubuntu', sans-serif;
+    font-size: 30px;
+}
+
+.nameText {
+    font-family: 'Ubuntu', sans-serif;
+    font-size: 30px;
+}
+
+p {
+    text-align: center;
+    font-size: 20px;
+}
+
+#battlefield { 
+    background: url(../images/arena.jpg) no-repeat center center; 
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+    min-height: 400px;
+    width: 100%;
+  }
