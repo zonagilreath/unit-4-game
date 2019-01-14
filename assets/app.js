@@ -4,11 +4,19 @@ class Hero {
         this.health = health;
         this.base_attack = base_attack;
         this.attack_power = base_attack;
-        // this.isPlayer = false;
-        // this.isDefending = false;
         this.isDead = false;
-        this.card = $("#" + this.name);
-        this.image = "assets/images/" + this.name + ".jpg";
+        
+        let image_url = "assets/images/" + this.name + ".jpg";
+        let card = $("<div>");
+        card.addClass("card");
+        card.addClass("col-3");
+        card.append("<p class='name'>" + this.name + "</p");
+        card.append("<img class='card-image' src='" + image_url + "'>");
+        card.append("<p class='hp'>" + this.health + "</p>");
+        card.appendTo("#lobby");
+
+        this.card = card;
+
     }
 
     power_up(){
@@ -25,75 +33,89 @@ class Hero {
         }
         return this.isDead;
     }
+
+    
 }
 
 
 const game = {
 
-    characters : {
-        goku : new Hero("Goku", 100, 10),
-        vegeta : new Hero("Vegeta", 120, 12),
-        trunks : new Hero("Trunks", 120, 12),
-        android18 : new Hero("Android-18", 120, 12)
-    },
+    
 
     needPlayer : true,
     needDefender: true,
 
     initGame : function(){
 
+        game.characters = [
+            new Hero("Goku", 100, 10),
+            new Hero("Vegeta", 120, 12),
+            new Hero("Trunks", 120, 12),
+            new Hero("Android-18", 120, 12)
+        ]
+
         game.needPlayer = true;
         game.needDefender = true;
+        game.addListeners();
 
-        for (let character of game.characters){
-            character.card.on("click", function(character){
-                if (game.needPlayer){
-                    game.addPlayer(character);
-                    game.moveEnemies();
-                }else if (game.needDefender){
-                    game.addDefender(character);
-                }
-            });
-        }
-
-        $("#attackButton").on("click", function(){
+        $("#attack-button").on("click", function(){
             if (!game.needPlayer & !game.needDefender){
                 game.round();
             }
         });
     },
 
+    addListeners : function(){
+        for (let i in game.characters){
+            character = game.characters[i];
+            character.card.on("click", function(){
+                if (game.needPlayer){
+                    game.addPlayer(game.characters[i]);
+                    game.moveEnemies();
+                }else if (game.needDefender){
+                    game.addDefender(game.characters[i]);
+                }
+            });
+        }
+    },
+
     addPlayer : function(character){
         character.card.addClass("player");
-        // character.card.removeClass("in-lobby");
-        $("#lobby").remove(character.card);
+        character.card.remove();
         $("#player-area").append(character.card);
+        game.addListeners();
         game.player = character;
+        game.needPlayer = false;
     },
 
     moveEnemies : function(){
         for (let character of game.characters){
             if (game.player != character){
                 character.card.addClass("enemy");
-                $("#lobby").remove(character.card);
-                // character.card.removeClass("in-lobby");
+                character.card.remove();
                 $("#enemy-area").append(character.card);
+                game.addListeners();
             }
         }
     },
 
     addDefender : function(character){
-        this.addClass("defender");
-        game.defender = character;
-        $("#lobby").remove(character.card);
-        // character.card.removeClass("in-lobby");
-        $("#enemyArea").append(character.card);
+        if (character != game.player){
+            character.card.addClass("defender");
+            game.defender = character;
+            character.card.remove();
+            $("#defender-area").append(character.card);
+            game.needDefender = false;
+            game.addListeners();
+        }
     },
 
     round : function(){
-        game.player.attack(defender);
+        game.player.attack(game.defender);
         game.player.power_up();
-        game.defender.attack(player);
+        game.defender.attack(game.player);
+        game.player.card.find(".hp").text(game.player.health);
+        game.defender.card.find(".hp").text(game.defender.health);
         game.checkBattleEnd();
     },
 
@@ -108,8 +130,14 @@ const game = {
 
     winBattle : function(){
         game.defender.card.remove();
-        game.defender = none;
-        needDefender = true;
+        game.defender = null;
+        game.needDefender = true;
+    },
+
+    createButton : function(){
+        let button = $("<button>");
+        button.addClass("btn btn-dark btn-lg");
+
     },
 
     loseGame : function(){
@@ -131,5 +159,6 @@ const game = {
 }
 
 
-goku = new Hero("Goku", 100, 10);
-vegeta = new Hero("Vegeta", 120, 12);
+// goku = new Hero("Goku", 100, 10);
+// vegeta = new Hero("Vegeta", 120, 12);
+game.initGame();
