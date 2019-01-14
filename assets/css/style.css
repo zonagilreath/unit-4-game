@@ -13,6 +13,10 @@ h2 {
     width: 100%;
 }
 
+.card {
+    border: none;
+}
+
 span h2 {
     display: inline;
 }

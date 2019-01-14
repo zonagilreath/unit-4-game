@@ -17,7 +17,6 @@ class Hero {
         card.append("<img class='card-image' src='" + image_url + "'>");
         card.append("<p class='hp'>" + this.health + "</p>");
         card.appendTo("#lobby");
-
         this.card = card;
 
     }
@@ -60,6 +59,7 @@ const game = {
             new Hero("Android-18", 120, 100)
         ]
 
+        game.winCount = 0;
         game.needPlayer = true;
         game.needDefender = true;
         game.addListeners();
@@ -145,9 +145,11 @@ const game = {
         game.defender.card.remove();
         game.defender = null;
         game.needDefender = true;
-        if (!($("#enemy-area").has("div"))){
+        game.winCount += 1;
+        if (game.winCount == game.characters.length - 1){
             game.winGame();
         }
+        
     },
 
     createButton : function(){
@@ -184,6 +186,13 @@ const game = {
 
 }
 
+// const messages = {
+//     playerAttack: `${game.player} hits ${game.defender} for ${game.player.attack}`,
+//     needDefender: "You need to picka  defender!"
+// }
+
+// messages['attack']
+// `${game.player} hits ${game.defender} for ${game.player.attack}`
 
 // goku = new Hero("Goku", 100, 10);
 // vegeta = new Hero("Vegeta", 120, 12);
